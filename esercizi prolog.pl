@@ -28,7 +28,7 @@ somma([A|Resto],Y,S2):- somma(Resto,Y,S3),S2 is S3+A.
 %%%%%%%%%%%%%%%%%%%%%%%
 
 %lista che si ottiene da lst togliendone i primi n elementi. 
-%Se il numero di elementi di lst è minore di n (oppure uguale a n), allora cut_n lst = [].
+%Se il numero di elementi di lst è minore di n (oppure uguale a n), allora cut_n lst = [].
 cut_n(L,N,[]):- lunghezza(L,M), M=<N,!.
 cut_n([_|Resto],N,L):- N>0,!,N1 is N-1,cut_n(Resto,N1,L).
 cut_n(A,N,A):- N=0.
@@ -90,7 +90,7 @@ triplette([A|Resto],L):- lung([A|Resto],Lung) ,(Lung>=3 -> lunghezza_lista([A|Re
 %%%%%%%%%%%%%%%%%%%%%%%
 
 %determina se due alberi binari hanno la stessa struttura 
-%(cioè se essi sono uguali quando si ignorano le rispettive etichette; 
+%(cioè se essi sono uguali quando si ignorano le rispettive etichette; 
 struttura_tree(empty,empty).
 struttura_tree(t(_,L1,R1),t(_,L2,R2)):-struttura_tree(L1,L2),struttura_tree(R1,R2).
 
@@ -101,13 +101,13 @@ foglia_in_list(empty,_).
 foglia_in_list(t(Root,empty,empty),Lista):- not(member(Root,Lista)),!,fail.
 foglia_in_list(t(_,L,R),Lista):-foglia_in_list(L,Lista),foglia_in_list(R,Lista).
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%
 
 %Crea l'insieme S a partire dai nodi dell'albero B
 set_tree(empty,[]).
 set_tree(t(Root,L,R),Set):- set_tree(L,Set1),set_tree(R,Set2),(member(Root,Set1);member(Root,Set2)->append(Set1,Set2,Set);append([Root|Set1],Set2,Set)).
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%
 
 %Crea l'insieme S a partire dalla lista L
 make_set([A],[A]).
@@ -185,7 +185,7 @@ num_foglie(t(_,empty,empty),1):-!.
 num_foglie(t(_,L,R),F):-num_foglie(L,F1),num_foglie(R,F2),F is F1+F2.
 
 
-%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%
 
 %true se esiste un cammino dalla radice alla foglia X e il 
 %cammino non contiene elementi della lista.
@@ -193,13 +193,13 @@ no_path(t(Root,empty,empty),_,Root):-!.
 no_path(t(Root,_,_),Lista,_):- member(Root,Lista),!,fail.
 no_path(t(_,L,R),Lista,Foglia):-no_path(L,Lista,Foglia);no_path(R,Lista,Foglia).
 
-%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%
 
 %restituisci la lista dei nodi del cammino dalla radice al nodo X.
 branch(t(Root,empty,empty),Root,[Root]).
 branch(t(Root,L,R),Foglia,Lista):- branch(L,Foglia,Lista1),append([Root],Lista1,Lista);branch(R,Foglia,Lista2),append([Root],Lista2,Lista).
 
-%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%
 
 %sostituisci il nodo N con il nodo Nuovo nell'albero T per creare l'albero T1.
 %se ci sono più occorrenze nel nodo, ne cambia una alla volta.
@@ -208,7 +208,7 @@ sostituisci_nodo(N,Nuovo,t(N,L,R),t(Nuovo,L,R)).
 sostituisci_nodo(N,Nuovo,t(Root,L1,R),t(Root,L2,R)):-sostituisci_nodo(N,Nuovo,L1,L2).
 sostituisci_nodo(N,Nuovo,t(Root,L,R1),t(Root,L,R2)):-sostituisci_nodo(N,Nuovo,R1,R2).
 
-%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%
 
 %Cancella la foglia con etichetta X dell'albero. Se ci sono piu' foglie con questa etichetta 
 %ne cancella una alla volta.
@@ -216,7 +216,7 @@ togli_foglia(X,t(X,empty,empty),empty).
 togli_foglia(X,t(Root,L1,R),t(Root,L2,R)):-togli_foglia(X,L1,L2).
 togli_foglia(X,t(Root,L,R1),t(Root,L,R2)):-togli_foglia(X,R1,R2).
 
-%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%
 
 %Cancella tutte le foglie con etichetta X dell'albero.
 togli_all_foglie(_,empty,empty).
@@ -224,14 +224,14 @@ togli_all_foglie(X,t(X,empty,empty),empty):-!.
 togli_all_foglie(X,t(Root,L,R),t(Root,L1,R1)):-togli_all_foglie(X,L,L1),togli_all_foglie(X,R,R1).
 
 
-%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%
 
 %elimina la prima occorrenza dell'elemento X dalla lista
 del_first(X,L,_):-not(member(X,L)),!,fail.
 del_first(X,[X|Resto],Resto):-!.
 del_first(X,[A|Resto],[A|L]):-del_first(X,Resto,L).
 
-%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%
 
 %elimina tutte le occorrenze dell'elemento X dalla lista
 del_all(X,A,A):-not(member(X,A)),!.
@@ -239,20 +239,20 @@ del_all(_,[],[]).
 del_all(X,[A|Resto],L):- (X=A->del_all(X,Resto,L);del_all(X,Resto,L1),append([A],L1,L)).
 
 
-%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%
 %true se tutti gli elemeni della prima lista sono anche elementi della seconda lista.
 occorrono([],_).
 occorrono([A|_],L):-not(member(A,L)),!,fail.
 occorrono([_|Resto],L):-occorrono(Resto,L).
 
 
-%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%
 %riporta la lunghezza del cammino dalla radice al nodo X
 lunghezza_cammino(t(Root,empty,empty),0,Root).
 lunghezza_cammino(t(_,L,_),M,Etichetta):-lunghezza_cammino(L,M1,E),M is M1+1,Etichetta=E.
 lunghezza_cammino(t(_,_,R),P,Etichetta):-lunghezza_cammino(R,M2,E),P is M2+1,Etichetta=E.
 
-%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%
 
 %restituisce il minimo della lista
 calcola_minore([A],A).
